@@ -14,6 +14,7 @@ import pt.ua.aca.dlxscheduling.instruction.DlxIInstruction;
 import pt.ua.aca.dlxscheduling.instruction.DlxInstruction;
 import pt.ua.aca.dlxscheduling.instruction.DlxInstructionList;
 import pt.ua.aca.dlxscheduling.instruction.DlxJInstruction;
+import pt.ua.aca.dlxscheduling.instruction.DlxLInstruction;
 import pt.ua.aca.dlxscheduling.instruction.DlxLwInstruction;
 import pt.ua.aca.dlxscheduling.instruction.DlxRInstruction;
 import pt.ua.aca.dlxscheduling.instruction.DlxSwInstruction;
@@ -28,10 +29,12 @@ public class DlxInstrutionTest {
     private static final String DLX_FILE_PATH = "/Users/cgoncalves/test.s";
     
     private static final String EMPTY_OR_COMMENT_REGEX = "^\\s*(;.*)?$";
-    private static final String LABEL_AND_INSTRUCTION_REGEX = "^(\\w+:)?\\s*(.+)\\s*(;.*)*$";
+    private static final String INSTRUCTION_REGEX = "^(\\w+:)?\\s*(.+)\\s*(;.*)*$";
+    private static final String LABEL_ONLY_REGEX = "^(\\w+):\\s*?$";
     
     private static final Pattern EMPTY_OR_COMMENT_PATTERN = Pattern.compile(EMPTY_OR_COMMENT_REGEX);
-    private static final Pattern LINE_PATTERN = Pattern.compile(LABEL_AND_INSTRUCTION_REGEX);
+    private static final Pattern LINE_PATTERN = Pattern.compile(INSTRUCTION_REGEX);
+    private static final Pattern LABEL_ONLY_PATTERN = Pattern.compile(LABEL_ONLY_REGEX);
 
     public DlxInstrutionTest() {
     }
@@ -54,6 +57,7 @@ public class DlxInstrutionTest {
         DlxLwInstruction lwInstr;
         DlxBInstruction bInstr;
         DlxJInstruction jInstr;
+        DlxLInstruction lInstr;
         
         while ( (strLine = bufferReader.readLine()) != null) {
             
@@ -65,19 +69,30 @@ public class DlxInstrutionTest {
                 continue;
             }
             
-//            logger.debug("Parsing line: " + strLine);
+            // find label
+            matcher = LABEL_ONLY_PATTERN.matcher(strLine);
+            if ( matcher.find() ) {
+                logger.debug("Line '" + strLine + "' has a label");
+                lInstr = DlxLInstruction.BUILD_DLXLINSTRUCTION(strLine);
+                dlxInstrList.add(lInstr);
+                continue;
+            }
             
-            // find label and instruction
+            // find instruction
             matcher = LINE_PATTERN.matcher(strLine);
-            
-            // get instruction and label, if exists
             if( !matcher.find() ) {
                 throw new Exception("Line '" + strLine + "' is malformated!");
             }
             
-            label = StringUtils.chop(matcher.group(1)); // remove ":"
+            label = matcher.group(1); // label
             instr = matcher.group(2); // instr
-                        
+      
+            if (label != null) {
+                logger.debug("Line '" + strLine + "' has a label");
+                lInstr = DlxLInstruction.BUILD_DLXLINSTRUCTION(strLine);
+                dlxInstrList.add(lInstr);
+            }
+            
             try {
                 // try to initialize as a R type instr
                 rInstr = DlxRInstruction.BUILD_DLXRINSTRUCTION(instr);

@@ -17,4 +17,5 @@ public interface Instruction {
     int getNCyclesNonForward();
     String getLabel();
     boolean hasLabel();
+    boolean isLabel();
 }

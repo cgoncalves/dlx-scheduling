@@ -94,4 +94,9 @@ public class DlxInstruction implements Instruction {
     public boolean hasLabel() {
         return ( getLabel() != null && !getLabel().isEmpty() );
     }
+
+    @Override
+    public boolean isLabel() {
+        return hasLabel();
+    }
 }
