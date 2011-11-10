@@ -13,6 +13,7 @@ import pt.ua.aca.dlxscheduling.instruction.DlxBInstruction;
 import pt.ua.aca.dlxscheduling.instruction.DlxIInstruction;
 import pt.ua.aca.dlxscheduling.instruction.DlxInstruction;
 import pt.ua.aca.dlxscheduling.instruction.DlxInstructionList;
+import pt.ua.aca.dlxscheduling.instruction.DlxJInstruction;
 import pt.ua.aca.dlxscheduling.instruction.DlxLwInstruction;
 import pt.ua.aca.dlxscheduling.instruction.DlxRInstruction;
 import pt.ua.aca.dlxscheduling.instruction.DlxSwInstruction;
@@ -26,42 +27,45 @@ public class DlxInstrutionTest {
     private static final Logger logger = LoggerFactory.getLogger(DlxInstrutionTest.class);
     private static final String DLX_FILE_PATH = "/Users/cgoncalves/test.s";
     
-    private static final String EMPTY_OR_COMMENT_REGEX = "^\\s*[;\\s*\\w*]*$"; // FIXME only supports \\w chars in comments
+    private static final String EMPTY_OR_COMMENT_REGEX = "^\\s*(;.*)?$";
     private static final String LABEL_AND_INSTRUCTION_REGEX = "^(\\w+:)?\\s*(.+)\\s*(;.*)*$";
     
-    private static final Pattern LINE_PATTERN = Pattern.compile(LABEL_AND_INSTRUCTION_REGEX);
     private static final Pattern EMPTY_OR_COMMENT_PATTERN = Pattern.compile(EMPTY_OR_COMMENT_REGEX);
+    private static final Pattern LINE_PATTERN = Pattern.compile(LABEL_AND_INSTRUCTION_REGEX);
 
     public DlxInstrutionTest() {
     }
 
     @Test
     public void instConstruction() throws IOException, Exception  {
-        //final String lineR = "loop: ADD $r1,$2,         $49 ; this is a comment!".toLowerCase();
         
         final FileReader fileReader = new FileReader(DLX_FILE_PATH);
         final BufferedReader bufferReader = new BufferedReader(fileReader);
-        final DlxInstructionList listInstr = new DlxInstructionList();
+        final DlxInstructionList dlxInstrList = new DlxInstructionList();
         
         String strLine;
         String label;
         String instr;
         Matcher matcher;
-        final DlxInstructionList dlxInstrList = new DlxInstructionList();
 
         DlxRInstruction rInstr;
         DlxIInstruction iInstr;
         DlxSwInstruction swInstr;
         DlxLwInstruction lwInstr;
         DlxBInstruction bInstr;
+        DlxJInstruction jInstr;
         
         while ( (strLine = bufferReader.readLine()) != null) {
             
             // dummy lines
             matcher = EMPTY_OR_COMMENT_PATTERN.matcher(strLine);
             if ( matcher.find() ) {
+                logger.debug("Discarding line: " + strLine);
+                System.out.println(strLine);
                 continue;
             }
+            
+//            logger.debug("Parsing line: " + strLine);
             
             // find label and instruction
             matcher = LINE_PATTERN.matcher(strLine);
@@ -114,6 +118,15 @@ public class DlxInstrutionTest {
                 // try to initialize as a B type instr
                 bInstr = DlxBInstruction.BUILD_DLXBINSTRUCTION(instr);
                 dlxInstrList.add(bInstr);
+                continue;
+            } catch (Exception ex) {
+                // ignore
+            }
+            
+            try {
+                // try to initialize as a J type instr
+                jInstr = DlxJInstruction.BUILD_DLXJINSTRUCTION(instr);
+                dlxInstrList.add(jInstr);
                 continue;
             } catch (Exception ex) {
                 // ignore
