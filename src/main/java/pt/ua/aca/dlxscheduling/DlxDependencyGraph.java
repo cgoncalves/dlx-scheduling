@@ -49,11 +49,49 @@ public class DlxDependencyGraph {
                            ( listInstrOriginal.get(cur).getROut() == listInstrOriginal.get(prev).getRIn1() )
                         || ( (listInstrOriginal.get(cur).getROut() == listInstrOriginal.get(prev).getRIn1()) && (listInstrOriginal.get(prev).getRIn1() != -1) )
                         || ( (listInstrOriginal.get(cur).getROut() == listInstrOriginal.get(prev).getRIn2()) && (listInstrOriginal.get(prev).getRIn2() != -1) )
-                        || ( ( (listInstrOriginal.get(cur).getMemOut() == true) || (listInstrOriginal.get(cur).getMemIn() == true) ) && ( ( listInstrOriginal.get(prev).getMemOut() == true) || (listInstrOriginal.get(prev).getMemIn() == true) ) )
+                        || ( ( (listInstrOriginal.get(cur).getMemOut() == true) || (listInstrOriginal.get(cur).getMemIn() == true) )
+                                && ( ( listInstrOriginal.get(prev).getMemOut() == true) || (listInstrOriginal.get(prev).getMemIn() == true) )
+                           )
                 ) {
                     listInstrDeps.get(cur).getWar().add(listInstrOriginal.get(prev));
                 }
             }
+            
+            // RAW: compare rIn1 against rOut
+            for (int prev = cur-1; prev >= 0; prev--) {
+                
+                // if prev instruction is a label, skip it
+                if (listInstrOriginal.get(prev).isLabel()) {
+                    continue;
+                }
+                
+                if (
+                        (listInstrOriginal.get(cur).getRIn1() == listInstrOriginal.get(prev).getROut())
+                        && (listInstrOriginal.get(prev).getROut() != -1)
+                   ) {
+                    listInstrDeps.get(cur).getRaw().add(listInstrOriginal.get(prev));
+                    break;
+                }
+            }
+            
+            // RAW: compare rIn2 against rOut
+            for (int prev = cur-1; prev >= 0; prev--) {
+                
+                // if prev instruction is a label, skip it
+                if (listInstrOriginal.get(prev).isLabel()) {
+                    continue;
+                }
+                
+                if (
+                        (listInstrOriginal.get(cur).getRIn2() == listInstrOriginal.get(prev).getROut())
+                        && (listInstrOriginal.get(prev).getROut() != -1)
+                   ) {
+                    listInstrDeps.get(cur).getRaw().add(listInstrOriginal.get(prev));
+                    break;
+                }
+            }
+            
+            
         }
     }
 
