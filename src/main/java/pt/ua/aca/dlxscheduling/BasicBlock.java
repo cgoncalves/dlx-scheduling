@@ -53,6 +53,10 @@ public class BasicBlock {
                 }
             }
         
+        if (!curList.isEmpty()) {
+            listBB.add(curList);
+        }
+
         iteratorListBB = listBB.iterator();
     }
     
