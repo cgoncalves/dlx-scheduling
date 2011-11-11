@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -158,5 +157,13 @@ public class DlxInstrutionTest {
             logger.info(i.toString());
         }
         logger.info("-----------------------------");
+        
+        
+        BasicBlock bb = new BasicBlock(dlxInstrList);
+        logger.info("Basic blocks:");
+        while (bb.hasNext()) {
+            logger.info(bb.next().toString());
+        }
+        
     }
 }
