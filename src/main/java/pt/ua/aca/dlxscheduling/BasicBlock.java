@@ -16,7 +16,7 @@ import pt.ua.aca.dlxscheduling.instruction.DlxLInstruction;
 public class BasicBlock {
     
     private final ArrayList<DlxInstructionList> listBB;
-    public final Iterator<DlxInstructionList> iteratorListBB;
+    public Iterator<DlxInstructionList> iteratorListBB;
 
 
     public BasicBlock(DlxInstructionList list) {
@@ -74,5 +74,9 @@ public class BasicBlock {
      */
     public boolean hasNext() {
         return iteratorListBB.hasNext();
+    }
+    
+    public void reset() {
+        iteratorListBB = listBB.iterator();
     }
 }

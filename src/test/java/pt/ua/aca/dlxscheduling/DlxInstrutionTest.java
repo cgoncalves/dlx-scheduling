@@ -165,5 +165,13 @@ public class DlxInstrutionTest {
             logger.info(bb.next().toString());
         }
         
+        logger.info("Resetting basic block...");
+        bb.reset();
+        
+        logger.info("Basic blocks:");
+        while (bb.hasNext()) {
+            logger.info(bb.next().toString());
+        }
+        
     }
 }
