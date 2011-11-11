@@ -28,29 +28,31 @@ public class BasicBlock {
         DlxInstructionList curList = new DlxInstructionList();
         DlxInstruction instr;
         
-        while (i.hasNext()) {
-            instr = i.next();
-            
-            if (instr instanceof DlxLInstruction) {
-                for (DlxInstruction tmp : curList) {
-                    if (tmp instanceof DlxLInstruction) {
-                        listBB.add(curList);
-                        curList = new DlxInstructionList();
-                        curList.add(instr);
-                        break;
+        bb_cycle:
+            while (i.hasNext()) {
+                instr = i.next();
+
+                if (instr instanceof DlxLInstruction) {
+                    for (DlxInstruction tmp : curList) {
+                        if (tmp instanceof DlxLInstruction) {
+                            listBB.add(curList);
+                            curList = new DlxInstructionList();
+                            curList.add(instr);
+                            continue bb_cycle;
+                        }
                     }
+
+                    curList.add(instr);
+                    continue;
                 }
-                
+
                 curList.add(instr);
-                continue;
+                if (instr instanceof DlxJInstruction || instr instanceof DlxBInstruction) {
+                    listBB.add(curList);
+                    curList = new DlxInstructionList();
+                }
             }
-            
-            curList.add(instr);
-            if (instr instanceof DlxJInstruction || instr instanceof DlxBInstruction) {
-                listBB.add(curList);
-                curList = new DlxInstructionList();
-            }
-        }
+        
         iteratorListBB = listBB.iterator();
     }
     
