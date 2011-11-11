@@ -43,6 +43,16 @@ public class DlxDependencyGraph {
                 if (listInstrOriginal.get(cur).getROut() == listInstrOriginal.get(prev).getROut()) {
                     listInstrDeps.get(cur).getWaw().add(listInstrOriginal.get(prev));
                 }
+                
+                // WAR
+                if (
+                           ( listInstrOriginal.get(cur).getROut() == listInstrOriginal.get(prev).getRIn1() )
+                        || ( (listInstrOriginal.get(cur).getROut() == listInstrOriginal.get(prev).getRIn1()) && (listInstrOriginal.get(prev).getRIn1() != -1) )
+                        || ( (listInstrOriginal.get(cur).getROut() == listInstrOriginal.get(prev).getRIn2()) && (listInstrOriginal.get(prev).getRIn2() != -1) )
+                        || ( ( (listInstrOriginal.get(cur).getMemOut() == true) || (listInstrOriginal.get(cur).getMemIn() == true) ) && ( ( listInstrOriginal.get(prev).getMemOut() == true) || (listInstrOriginal.get(prev).getMemIn() == true) ) )
+                ) {
+                    listInstrDeps.get(cur).getWar().add(listInstrOriginal.get(prev));
+                }
             }
         }
     }
