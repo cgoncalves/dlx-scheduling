@@ -168,9 +168,12 @@ public class DlxInstrutionTest {
         logger.info("Resetting basic block...");
         bb.reset();
         
-        logger.info("Basic blocks:");
+        logger.info("Dependency graph:");
+        DlxDependencyGraph depGraph;
         while (bb.hasNext()) {
-            logger.info(bb.next().toString());
+            depGraph = new DlxDependencyGraph(bb.next());
+            depGraph.generateDependencyGraph();
+            logger.info(depGraph.toString());
         }
         
     }
