@@ -43,6 +43,12 @@ public class DlxInstructionDependency {
     public boolean isCandidateNode() {
         return (raw.isEmpty() && war.isEmpty() && waw.isEmpty());
     }
+    
+    public void removeAllNodeDependencies(DlxInstruction instrToRemove) {
+        raw.remove(instrToRemove);
+        war.remove(instrToRemove);
+        waw.remove(instrToRemove);
+    }
 
     @Override
     public String toString() {
@@ -57,5 +63,39 @@ public class DlxInstructionDependency {
         ret.append(waw);
         
         return ret.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final DlxInstructionDependency other = (DlxInstructionDependency) obj;
+        if (this.instr != other.instr && (this.instr == null || !this.instr.equals(other.instr))) {
+            return false;
+        }
+        if (this.raw != other.raw && (this.raw == null || !this.raw.equals(other.raw))) {
+            return false;
+        }
+        if (this.war != other.war && (this.war == null || !this.war.equals(other.war))) {
+            return false;
+        }
+        if (this.waw != other.waw && (this.waw == null || !this.waw.equals(other.waw))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 59 * hash + (this.instr != null ? this.instr.hashCode() : 0);
+        hash = 59 * hash + (this.raw != null ? this.raw.hashCode() : 0);
+        hash = 59 * hash + (this.war != null ? this.war.hashCode() : 0);
+        hash = 59 * hash + (this.waw != null ? this.waw.hashCode() : 0);
+        return hash;
     }
 }
