@@ -159,7 +159,7 @@ public class DlxInstrutionTest {
         logger.info("-----------------------------");
         
         
-        BasicBlock bb = new BasicBlock(dlxInstrList);
+        DlxBasicBlock bb = new DlxBasicBlock(dlxInstrList);
         logger.info("Basic blocks:");
         while (bb.hasNext()) {
             logger.info(bb.next().toString());

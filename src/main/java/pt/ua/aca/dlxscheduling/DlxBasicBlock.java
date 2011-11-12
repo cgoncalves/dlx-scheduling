@@ -13,13 +13,13 @@ import pt.ua.aca.dlxscheduling.instruction.DlxLInstruction;
  *
  * @author Carlos Gonçalves &lt;carlos.goncalves [at] ua [dot] pt&gt;
  */
-public class BasicBlock {
+public class DlxBasicBlock {
     
     private final ArrayList<DlxInstructionList> listBB;
     public Iterator<DlxInstructionList> iteratorListBB;
 
 
-    public BasicBlock(DlxInstructionList list) {
+    public DlxBasicBlock(DlxInstructionList list) {
         Validate.notEmpty(list);
         
         listBB = new ArrayList<DlxInstructionList>();
