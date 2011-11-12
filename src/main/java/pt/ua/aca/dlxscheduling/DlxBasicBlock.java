@@ -13,7 +13,7 @@ import pt.ua.aca.dlxscheduling.instruction.DlxLInstruction;
  *
  * @author Carlos Gonçalves &lt;carlos.goncalves [at] ua [dot] pt&gt;
  */
-public class DlxBasicBlock {
+public class DlxBasicBlock implements Iterator<DlxInstructionList> {
     
     private final ArrayList<DlxInstructionList> listBB;
     public Iterator<DlxInstructionList> iteratorListBB;
@@ -56,6 +56,7 @@ public class DlxBasicBlock {
      * Return a basic block
      * @return null if has no basic blocks
      */
+    @Override
     public DlxInstructionList next() {
         if ( !hasNext() ) {
             return null;
@@ -68,11 +69,17 @@ public class DlxBasicBlock {
      * Check whether has next basic block
      * @return 
      */
+    @Override
     public boolean hasNext() {
         return iteratorListBB.hasNext();
     }
     
     public void reset() {
         iteratorListBB = listBB.iterator();
+    }
+
+    @Override
+    public void remove() {
+        iteratorListBB.remove();
     }
 }
