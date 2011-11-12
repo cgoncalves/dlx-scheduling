@@ -39,6 +39,10 @@ public class DlxInstructionDependency {
     public ArrayList<DlxInstruction> getWaw() {
         return waw;
     }
+    
+    public boolean isCandidateNode() {
+        return (raw.isEmpty() && war.isEmpty() && waw.isEmpty());
+    }
 
     @Override
     public String toString() {

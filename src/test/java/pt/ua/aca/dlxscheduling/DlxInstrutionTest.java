@@ -168,12 +168,18 @@ public class DlxInstrutionTest {
         logger.info("Resetting basic block...");
         bb.reset();
         
-        logger.info("Dependency graph:");
+        logger.info("Dependency graph for each basic block:");
         DlxDependencyGraph depGraph;
         while (bb.hasNext()) {
             depGraph = new DlxDependencyGraph(bb.next());
             depGraph.generateDependencyGraph();
             logger.info(depGraph.toString());
+            
+            logger.info("Candidate nodes:");
+            for (DlxInstruction candidateNode : depGraph.getCandidateNodes()) {
+                logger.info(candidateNode.toString());
+            }
+            logger.info("Candidate nodes END");
         }
         
     }

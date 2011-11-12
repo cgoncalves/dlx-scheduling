@@ -94,6 +94,18 @@ public class DlxDependencyGraph implements Cloneable {
             
         }
     }
+    
+    public DlxInstructionList getCandidateNodes() {
+        DlxInstructionList candidateNodesList = new DlxInstructionList();
+        
+        for (DlxInstructionDependency instrDep : listInstrDeps) {
+            if (instrDep.isCandidateNode()) {
+                candidateNodesList.add(instrDep.getInstr());
+            }
+        }
+        
+        return candidateNodesList;
+    }
 
     @Override
     public String toString() {
