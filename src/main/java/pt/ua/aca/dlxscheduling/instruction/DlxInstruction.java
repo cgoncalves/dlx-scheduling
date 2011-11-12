@@ -99,4 +99,68 @@ public class DlxInstruction implements Instruction {
     public boolean isLabel() {
         return hasLabel();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final DlxInstruction other = (DlxInstruction) obj;
+        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+            return false;
+        }
+        if (this.rIn1 != other.rIn1) {
+            return false;
+        }
+        if (this.rIn2 != other.rIn2) {
+            return false;
+        }
+        if (this.rOut != other.rOut) {
+            return false;
+        }
+        if ((this.offset == null) ? (other.offset != null) : !this.offset.equals(other.offset)) {
+            return false;
+        }
+        if ((this.imm == null) ? (other.imm != null) : !this.imm.equals(other.imm)) {
+            return false;
+        }
+        if (this.memIn != other.memIn) {
+            return false;
+        }
+        if (this.memOut != other.memOut) {
+            return false;
+        }
+        if (this.nCyclesForward != other.nCyclesForward) {
+            return false;
+        }
+        if (this.nCyclesNonForward != other.nCyclesNonForward) {
+            return false;
+        }
+        if ((this.label == null) ? (other.label != null) : !this.label.equals(other.label)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 67 * hash + (this.name != null ? this.name.hashCode() : 0);
+        hash = 67 * hash + this.rIn1;
+        hash = 67 * hash + this.rIn2;
+        hash = 67 * hash + this.rOut;
+        hash = 67 * hash + (this.offset != null ? this.offset.hashCode() : 0);
+        hash = 67 * hash + (this.imm != null ? this.imm.hashCode() : 0);
+        hash = 67 * hash + (this.memIn ? 1 : 0);
+        hash = 67 * hash + (this.memOut ? 1 : 0);
+        hash = 67 * hash + this.nCyclesForward;
+        hash = 67 * hash + this.nCyclesNonForward;
+        hash = 67 * hash + (this.label != null ? this.label.hashCode() : 0);
+        return hash;
+    }
+    
+    
 }
