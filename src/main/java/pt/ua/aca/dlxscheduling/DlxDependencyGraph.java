@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import org.apache.commons.lang.Validate;
 import pt.ua.aca.dlxscheduling.instruction.DlxInstruction;
 import pt.ua.aca.dlxscheduling.instruction.DlxInstructionList;
+import pt.ua.aca.dlxscheduling.instruction.DlxLwInstruction;
+import pt.ua.aca.dlxscheduling.instruction.DlxSwInstruction;
 
 /**
  *
@@ -49,9 +51,10 @@ public class DlxDependencyGraph implements Cloneable {
                            ( listInstrOriginal.get(cur).getROut() == listInstrOriginal.get(prev).getRIn1() )
                         || ( (listInstrOriginal.get(cur).getROut() == listInstrOriginal.get(prev).getRIn1()) && (listInstrOriginal.get(prev).getRIn1() != -1) )
                         || ( (listInstrOriginal.get(cur).getROut() == listInstrOriginal.get(prev).getRIn2()) && (listInstrOriginal.get(prev).getRIn2() != -1) )
-                        || ( ( (listInstrOriginal.get(cur).getMemOut() == true) || (listInstrOriginal.get(cur).getMemIn() == true) )
-                                && ( ( listInstrOriginal.get(prev).getMemOut() == true) || (listInstrOriginal.get(prev).getMemIn() == true) )
-                           )
+                        || ( (listInstrOriginal.get(cur) instanceof DlxSwInstruction) && (listInstrOriginal.get(prev) instanceof DlxLwInstruction) )
+//                        || ( ( (listInstrOriginal.get(cur).getMemOut() == true) || (listInstrOriginal.get(cur).getMemIn() == true) )
+//                                && ( ( listInstrOriginal.get(prev).getMemOut() == true) || (listInstrOriginal.get(prev).getMemIn() == true) )
+//                           )
                 ) {
                     listInstrDeps.get(cur).getWar().add(listInstrOriginal.get(prev));
                 }
@@ -92,6 +95,20 @@ public class DlxDependencyGraph implements Cloneable {
             }
             
             
+            // RAW: mem
+            for (int prev = cur-1; prev >= 0; prev--) {
+                
+                // if prev instruction is a label, skip it
+                if (listInstrOriginal.get(prev).isLabel()) {
+                    continue;
+                }
+                
+                if ( (listInstrOriginal.get(cur) instanceof DlxLwInstruction) && (listInstrOriginal.get(prev) instanceof DlxSwInstruction) ){
+                    listInstrDeps.get(cur).getRaw().add(listInstrOriginal.get(prev));
+                    break;
+                }
+            }
+            
         }
     }
     
@@ -105,6 +122,50 @@ public class DlxDependencyGraph implements Cloneable {
         }
         
         return candidateNodesList;
+    }
+    
+    public int getSumCriticalPathRAW(DlxInstruction instr) {
+        int sum = 0;
+        
+        for (DlxInstructionDependency instrDep : listInstrDeps) {
+            if (instrDep.getRaw().contains(instr)) {
+                sum++;
+            }
+        }
+        
+        return sum;
+    }
+    
+    public void remove(DlxInstruction instrToRemove) {
+        // remove dependent nodes first
+        for (DlxInstructionDependency dep : listInstrDeps) {
+            dep.removeAllNodeDependencies(instrToRemove);
+        }
+        
+        for (int i = 0; i < listInstrDeps.size(); i++) {
+            if (listInstrDeps.get(i).getInstr().equals(instrToRemove)) {
+                listInstrDeps.remove(listInstrDeps.get(i));
+                return;
+            }
+        }
+        
+//      FIXME the code below will throw an ConcurrentModification Exception
+//            that is why I'm for now using the last for cycle code above :-/
+//        for (DlxInstructionDependency dep : listInstrDeps) {
+//            System.out.println("AAAAAAAAAAAA");
+//            if (dep.getInstr().equals(instrToRemove)) {
+//                System.out.println(dep);
+//                System.out.println("BBBBBBBBBBBBB");
+//                listInstrDeps.remove(dep);
+////                return; FIXME there should have no problem returning at this point
+//            }
+//        }
+    }
+    
+    public void remove(DlxInstructionList instrListToRemove) {
+        for (DlxInstruction instr : instrListToRemove) {
+            remove(instr);
+        }
     }
 
     public ArrayList<DlxInstructionDependency> getListInstrDeps() {
