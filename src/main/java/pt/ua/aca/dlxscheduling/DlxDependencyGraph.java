@@ -9,7 +9,7 @@ import pt.ua.aca.dlxscheduling.instruction.DlxInstructionList;
  *
  * @author Carlos Gonçalves &lt;carlos.goncalves [at] ua [dot] pt&gt;
  */
-public class DlxDependencyGraph {
+public class DlxDependencyGraph implements Cloneable {
     
     private final DlxInstructionList listInstrOriginal;
     private final ArrayList<DlxInstructionDependency> listInstrDeps;
@@ -105,6 +105,37 @@ public class DlxDependencyGraph {
         }
         
         return ret.toString();
+    }
+
+    @Override
+    public DlxDependencyGraph clone() throws CloneNotSupportedException {
+        return (DlxDependencyGraph) super.clone();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final DlxDependencyGraph other = (DlxDependencyGraph) obj;
+        if (this.listInstrOriginal != other.listInstrOriginal && (this.listInstrOriginal == null || !this.listInstrOriginal.equals(other.listInstrOriginal))) {
+            return false;
+        }
+        if (this.listInstrDeps != other.listInstrDeps && (this.listInstrDeps == null || !this.listInstrDeps.equals(other.listInstrDeps))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 37 * hash + (this.listInstrOriginal != null ? this.listInstrOriginal.hashCode() : 0);
+        hash = 37 * hash + (this.listInstrDeps != null ? this.listInstrDeps.hashCode() : 0);
+        return hash;
     }
     
 }
