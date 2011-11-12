@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 public class DlxJInstruction extends DlxInstruction {
 
     private static enum DLXJINST {
-        J, JAL, JALR, JR
+        J, JAL // FIXME , JALR, JR
     };
     
     private static HashSet<String> GET_DLXJINST_ENUMS() {
