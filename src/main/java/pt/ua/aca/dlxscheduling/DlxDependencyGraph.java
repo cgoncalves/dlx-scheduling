@@ -107,6 +107,14 @@ public class DlxDependencyGraph implements Cloneable {
         return candidateNodesList;
     }
 
+    public ArrayList<DlxInstructionDependency> getListInstrDeps() {
+        return listInstrDeps;
+    }
+
+    public DlxInstructionList getListInstrOriginal() {
+        return listInstrOriginal;
+    }
+    
     @Override
     public String toString() {
         StringBuilder ret = new StringBuilder();
