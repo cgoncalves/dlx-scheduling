@@ -28,30 +28,22 @@ public class DlxBasicBlock {
         DlxInstructionList curList = new DlxInstructionList();
         DlxInstruction instr;
         
-        bb_cycle:
-            while (i.hasNext()) {
-                instr = i.next();
+        while (i.hasNext()) {
+            instr = i.next();
 
-                if (instr instanceof DlxLInstruction) {
-                    for (DlxInstruction tmp : curList) {
-                        if (tmp instanceof DlxLInstruction) {
-                            listBB.add(curList);
-                            curList = new DlxInstructionList();
-                            curList.add(instr);
-                            continue bb_cycle;
-                        }
-                    }
-
-                    curList.add(instr);
-                    continue;
-                }
-
+            if (instr instanceof DlxLInstruction && !curList.isEmpty()) {
+                listBB.add(curList);
+                curList = new DlxInstructionList();
                 curList.add(instr);
-                if (instr instanceof DlxJInstruction || instr instanceof DlxBInstruction) {
-                    listBB.add(curList);
-                    curList = new DlxInstructionList();
-                }
+                continue;
             }
+
+            curList.add(instr);
+            if (instr instanceof DlxJInstruction || instr instanceof DlxBInstruction) {
+                listBB.add(curList);
+                curList = new DlxInstructionList();
+            }
+        }
         
         if (!curList.isEmpty()) {
             listBB.add(curList);
