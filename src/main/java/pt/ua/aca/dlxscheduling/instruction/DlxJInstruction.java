@@ -25,8 +25,8 @@ public class DlxJInstruction extends DlxInstruction {
         return values;
     }
 
-    public static final int NUM_CYCLES_FORWARD = 2;
-    public static final int NUM_CYCLES_NON_FORWARD = 2;
+    public static final int NUM_CYCLES_FORWARD = 2; // don't care
+    public static final int NUM_CYCLES_NON_FORWARD = 2; // don't care
     private static final String J_TYPE_REGEX = "(\\w+)\\s+(\\w+)";
     private static Pattern B_TYPE_PATTERN = Pattern.compile(J_TYPE_REGEX);
     

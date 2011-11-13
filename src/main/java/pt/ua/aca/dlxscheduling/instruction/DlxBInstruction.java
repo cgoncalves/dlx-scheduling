@@ -25,8 +25,8 @@ public class DlxBInstruction extends DlxInstruction {
         return values;
     }
 
-    public static final int NUM_CYCLES_FORWARD = 3;
-    public static final int NUM_CYCLES_NON_FORWARD = 3;
+    public static final int NUM_CYCLES_FORWARD = 3; // don't care
+    public static final int NUM_CYCLES_NON_FORWARD = 3; // don't care
     private static final String B_TYPE_REGEX = "(\\w+)\\s+[R|r](\\d+),\\s*(\\w+)";
     private static Pattern B_TYPE_PATTERN = Pattern.compile(B_TYPE_REGEX);
     

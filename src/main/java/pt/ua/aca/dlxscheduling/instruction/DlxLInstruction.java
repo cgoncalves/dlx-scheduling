@@ -9,8 +9,8 @@ import java.util.regex.Pattern;
  */
 public class DlxLInstruction extends DlxInstruction {
 
-    public static final int NUM_CYCLES_FORWARD = 0;
-    public static final int NUM_CYCLES_NON_FORWARD = 0;
+    public static final int NUM_CYCLES_FORWARD = 0; // don't care
+    public static final int NUM_CYCLES_NON_FORWARD = 0; // don't care
     private static final String L_TYPE_REGEX = "^(\\w+)(:\\s*(.*)\\s*(;.*)*)?$";
     private static Pattern L_TYPE_PATTERN = Pattern.compile(L_TYPE_REGEX);
     

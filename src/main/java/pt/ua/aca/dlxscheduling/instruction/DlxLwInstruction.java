@@ -25,8 +25,8 @@ public class DlxLwInstruction extends DlxInstruction {
         return values;
     }
 
-    public static final int NUM_CYCLES_FORWARD = 4;
-    public static final int NUM_CYCLES_NON_FORWARD = 5;
+    public static final int NUM_CYCLES_FORWARD = 1;
+    public static final int NUM_CYCLES_NON_FORWARD = 2;
     private static final String LW_TYPE_REGEX = "(\\w+)\\s+[R|r](\\d+),\\s*([#|0X]?\\w+)\\([R|r](\\d+)\\)";
     private static Pattern LW_TYPE_PATTERN = Pattern.compile(LW_TYPE_REGEX);
     
