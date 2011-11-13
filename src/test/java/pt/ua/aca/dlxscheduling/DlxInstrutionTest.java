@@ -25,7 +25,7 @@ import pt.ua.aca.dlxscheduling.instruction.DlxSwInstruction;
 public class DlxInstrutionTest {
     
     private static final Logger logger = LoggerFactory.getLogger(DlxInstrutionTest.class);
-    private static final String DLX_FILE_PATH = "/Users/cgoncalves/test.s";
+    private static final String DLX_FILE_PATH = "/Users/cgoncalves/test4.s";
     
     private static final String EMPTY_OR_COMMENT_REGEX = "^\\s*(;.*)?$";
     private static final String INSTRUCTION_REGEX = "^(\\w+:)?\\s*(.+)\\s*(;.*)*$";
@@ -170,17 +170,24 @@ public class DlxInstrutionTest {
         
         logger.info("Dependency graph for each basic block:");
         DlxDependencyGraph depGraph;
+        DlxScheduler scheduler;
+        DlxInstructionList instrListScheduled;
+        
         while (bb.hasNext()) {
             depGraph = new DlxDependencyGraph(bb.next());
             depGraph.generateDependencyGraph();
             logger.info(depGraph.toString());
             
-            logger.info("Candidate nodes:");
-            for (DlxInstruction candidateNode : depGraph.getCandidateNodes()) {
-                logger.info(candidateNode.toString());
-            }
-            logger.info("Candidate nodes END");
+//            logger.info("Candidate nodes:");
+//            for (DlxInstruction candidateNode : depGraph.getCandidateNodes()) {
+//                logger.info(candidateNode.toString());
+//            }
+//            logger.info("Candidate nodes END");
+            
+            logger.info("Scheduled basic block:");
+            scheduler = new DlxListScheduler(depGraph);
+            instrListScheduled = scheduler.schedule();
+            logger.info(instrListScheduled.toString());
         }
-        
     }
 }
