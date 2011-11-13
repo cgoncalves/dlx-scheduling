@@ -33,7 +33,6 @@ public class DlxListScheduler implements DlxScheduler {
          */
         DlxInstruction labelInstruction = depGraph.getListInstrDeps().get(0).getInstr();
         if (labelInstruction instanceof DlxLInstruction) {
-            System.out.println("INSTRUCAO EH UmA LABEL: " + labelInstruction);
             instrListScheduled.add(labelInstruction);
             depGraph.remove(labelInstruction);
         }
